@@ -13,4 +13,7 @@ ARG GIT_COMMIT=unspecified
 LABEL GIT_COMMIT=$GIT_COMMIT
 ENV GIT_COMMIT=$GIT_COMMIT
 
-COPY model-training /data
+RUN mkdir /models
+RUN chmod 0755 /models
+
+COPY app /data
