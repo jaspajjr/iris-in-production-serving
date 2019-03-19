@@ -10,35 +10,35 @@ steps:
 
 # [END cloudbuild]
 
-# [START cloudbuild-trigger-cd]
-- name: 'gcr.io/cloud-builders/gcloud'
-  id: Decrypt Keys
-  args:
-  - kms
-  - decrypt
-  - --ciphertext-file=id_rsa.enc
-  - --plaintext-file=/root/.ssh/id_rsa
-  - --location=global
-  - --keyring=search-keyring
-  - --key=github-key
-  volumes:
-  - name: 'ssh'
-    path: /root/.ssh
+# # [START iris-serving-trigger-cd]
+# - name: 'gcr.io/cloud-builders/gcloud'
+#   id: Decrypt Keys
+#   args:
+#   - kms
+#   - decrypt
+#   - --ciphertext-file=id_rsa.enc
+#   - --plaintext-file=/root/.ssh/id_rsa
+#   - --location=global
+#   - --keyring=search-keyring
+#   - --key=github-key
+#   volumes:
+#   - name: 'ssh'
+#     path: /root/.ssh
 
-- name: 'gcr.io/cloud-builders/git'
-  entrypoint: 'bash'
-  args:
-  - '-c'
-  - |
-    chmod 600 /root/.ssh/id_rsa
-    cat <<EOF >/root/.ssh/config
-    Hostname github.com
-    IdentityFile /root/.ssh/id_rsa
-    EOF
-    mv known_hosts /root/.ssh/known_hosts
-  volumes:
-  - name: 'ssh'
-    path: /root/.ssh
+# - name: 'gcr.io/cloud-builders/git'
+#   entrypoint: 'bash'
+#   args:
+#   - '-c'
+#   - |
+#     chmod 600 /root/.ssh/id_rsa
+#     cat <<EOF >/root/.ssh/config
+#     Hostname github.com
+#     IdentityFile /root/.ssh/id_rsa
+#     EOF
+#     mv known_hosts /root/.ssh/known_hosts
+#   volumes:
+#   - name: 'ssh'
+#     path: /root/.ssh
 
 - name: 'gcr.io/cloud-builders/gcloud'
   id: Generate manifest
@@ -58,6 +58,5 @@ steps:
   env:
   - 'CLOUDSDK_COMPUTE_ZONE=us-central1-f'
   - 'CLOUDSDK_CONTAINER_CLUSTER=$REPO_NAME'
-
  
-# [END cloudbuild-trigger-cd]
+# [END iris-serving-trigger-cd]
